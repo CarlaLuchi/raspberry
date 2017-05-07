@@ -1,0 +1,25 @@
+{
+  "name": "raspberry",
+  "version": "0.0.9",
+  "description": "servicio apirest",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarlaLuchi/raspberry.git"
+  },
+  "author": "Carla Mamani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CarlaLuchi/raspberry/issues"
+  },
+  "homepage": "https://github.com/CarlaLuchi/raspberry#readme",
+  "dependencies":{
+      "body-parser":"~1.13.2",
+      "express":"~4.13.1",
+      "method-override":"^2.1.2",
+      "mongoose":"~3.6.11"
+  }
+}
