@@ -1,45 +1,116 @@
-//Es mi archivo principal de todo
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var methodOverride = require ("method-override");
+var methodOverride = require("method-override");
 var app = express();
-//conectar a base de datos mongo db 
-//base de datos se llama univalle 
-mongoose.connect('mongodb://localhost/univalle',function(err, res){
-	if(err) {
-		throw err;
-	}
-	console.log('Conectado a la base de datos...');
+
+//Coneccion a la base de datos
+mongoose.connect('mongodb://localhost/univalle', function(err, res) {
+ if(err) throw err;
+ console.log('Conectado a la base de datos');
 });
-// definir carpeta publico para el caso de tener pagina web (para el publico desde afuera)
+
+//Definimos carpeta de acceso publico
 app.use(express.static('public'));
 
-//definiendo middleware como software que  nos ayuda con los metodos
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.json()); 
 app.use(methodOverride());
 
-//importar los modelos y controladores
-var choferModel = require('./models/chofer')(app,mongoose);
+//Importar los modelos y controladores
+//choferes
+var choferModel = require('./models/chofer')(app, mongoose);
 var choferController = require('./controllers/choferController');
+//vehiculos
+var vehiculoModel = require('./models/vehiculo')(app, mongoose);
+var vehiculoController = require('./controllers/vehiculoController');
+//sindicatos
+var sindicatoModel = require('./models/sindicato')(app, mongoose);
+var sindicatoController = require('./controllers/sindicatoController');
+//relaciones
+var relacionModel = require('./models/relacion')(app, mongoose);
+var relacionController = require('./controllers/relacionController');
+//usuarios
+var usuarioModel = require('./models/usuario')(app, mongoose);
+var usuarioController = require('./controllers/usuarioController');
+//autorizados
+var autorizadoModel = require('./models/autorizado')(app, mongoose);
+var autorizadoController = require('./controllers/autorizadoController');
+//recorridos
+var recorridoModel = require('./models/recorrido')(app, mongoose);
+var recorridoController = require('./controllers/recorridoController');
 
-//definimos la ruta del proyecto
+//Definimos la ruta del proyecto
 var router = express.Router();
 app.use(router);
 
-//definimos la ruta del API
+//Definimos la ruta del API
 var api = express.Router();
+//choferes
+api.route('/choferes') 
+ .get(choferController.findAll)
+ .post(choferController.add);
 
-api.route('/choferes')
-.get(choferController.findAll)
-.post(choferController.add);
+api.route('/choferes/:id') 
+ .get(choferController.findById)
+ .put(choferController.update);
 
-api.route('/choferes/:id')
-.get(choferController.findById)
-.put(choferController.update);
+//vehiculos
+api.route('/vehiculos') 
+ .get(vehiculoController.findAll)
+ .post(vehiculoController.add);
 
-app.use('/api',api);
+api.route('/vehiculos/:id') 
+ .get(vehiculoController.findById)
+ .put(vehiculoController.update);
+
+//sindicatos
+api.route('/sindicatos') 
+ .get(sindicatoController.findAll)
+ .post(sindicatoController.add);
+
+api.route('/sindicatos/:id') 
+ .get(sindicatoController.findById)
+ .put(sindicatoController.update);
+
+//relacion
+api.route('/relaciones') 
+ .get(relacionController.findAll)
+ .post(relacionController.add);
+
+api.route('/relaciones/:id') 
+ .get(relacionController.findById)
+ .put(relacionController.update);
+
+//usuario
+api.route('/usuarios') 
+ .get(usuarioController.findAll)
+ .post(usuarioController.add);
+
+api.route('/usuarios/:id') 
+ .get(usuarioController.findById)
+ .put(usuarioController.update);
+
+//autorizado
+api.route('/autorizados') 
+ .get(autorizadoController.findAll)
+ .post(autorizadoController.add);
+
+api.route('/autorizados/:id') 
+ .get(autorizadoController.findById)
+ .put(autorizadoController.update);
+
+ //recorrido
+api.route('/recorridos') 
+ .get(recorridoController.findAll)
+ .post(recorridoController.add);
+
+api.route('/recorridos/:id') 
+ .get(recorridoController.findById)
+ .put(recorridoController.update);
+
+app.use('/api', api);
 
 //iniciar el servidor
 app.listen(3000,function(){
